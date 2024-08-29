@@ -2,7 +2,8 @@
   "name": "hardhat-project",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.9"
+    "hardhat": "^2.22.9",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@rari-capital/solmate": "^6.4.0",

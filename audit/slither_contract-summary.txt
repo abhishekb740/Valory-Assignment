@@ -1,0 +1,65 @@
+'solc --version' running
+'solc ./MiniTreasury-flatten.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,/home/andrey/valory/Valory-Assignment/audit' running
+Compilation warnings/errors on ./MiniTreasury-flatten.sol:
+Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information.
+--> MiniTreasury-flatten.sol
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:616:9:
+    |
+616 |         address operator,
+    |         ^^^^^^^^^^^^^^^^
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:619:9:
+    |
+619 |         bytes calldata data
+    |         ^^^^^^^^^^^^^^^^^^^
+
+
+INFO:Printers:
++ Contract ERC20 (Most derived contract)
+  - From ERC20
+    - DOMAIN_SEPARATOR() (public)
+    - _burn(address,uint256) (internal)
+    - _mint(address,uint256) (internal)
+    - approve(address,uint256) (public)
+    - computeDomainSeparator() (internal)
+    - constructor(string,string,uint8) (internal)
+    - permit(address,address,uint256,uint256,uint8,bytes32,bytes32) (public)
+    - transfer(address,uint256) (public)
+    - transferFrom(address,address,uint256) (public)
+
++ Contract ERC721 (Most derived contract)
+  - From ERC721
+    - _burn(uint256) (internal)
+    - _mint(address,uint256) (internal)
+    - _safeMint(address,uint256) (internal)
+    - _safeMint(address,uint256,bytes) (internal)
+    - approve(address,uint256) (public)
+    - balanceOf(address) (public)
+    - constructor(string,string) (internal)
+    - ownerOf(uint256) (public)
+    - safeTransferFrom(address,address,uint256) (public)
+    - safeTransferFrom(address,address,uint256,bytes) (public)
+    - setApprovalForAll(address,bool) (public)
+    - supportsInterface(bytes4) (public)
+    - tokenURI(uint256) (public)
+    - transferFrom(address,address,uint256) (public)
+
++ Contract ERC721TokenReceiver
+  - From ERC721TokenReceiver
+    - onERC721Received(address,address,uint256,bytes) (external)
+
++ Contract MiniTreasury (Most derived contract)
+  - From MiniTreasury
+    - constructor() (public)
+    - depositERC20(address,uint256) (external)
+    - depositERC721(address,uint256) (external)
+    - disableAToken(address) (external)
+    - enableAToken(address) (external)
+    - onERC721Received(address,address,uint256,bytes) (external)
+    - withdrawERC20(address,uint256) (external)
+    - withdrawERC721(address,uint256) (external)
+
+INFO:Slither:. analyzed (4 contracts)
