@@ -9,7 +9,7 @@ contract MiniTreasury is ERC721TokenReceiver {
     /**
     @dev Address of the owner of the contract 
     */
-    address public immutable owner;
+    address public owner;
 
     /**
     @dev Events to log the deposit and withdrawal of ERC20 and ERC721 tokens
