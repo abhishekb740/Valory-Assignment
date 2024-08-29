@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import "@rari-capital/solmate/src/tokens/ERC20.sol";
-import "@rari-capital/solmate/src/tokens/ERC721.sol";
+import "./IERC20.sol";
+import "./IERC721.sol";
+import "./ERC721TokenReceiver.sol";
 
 contract MiniTreasury is ERC721TokenReceiver {
     /**
@@ -44,8 +45,20 @@ contract MiniTreasury is ERC721TokenReceiver {
     */
     mapping(address => bool) public enabledTokens;
     mapping(address => mapping(address => uint256)) public erc20TokenBalances;
-    mapping(address => mapping(address => uint256[]))
-        public erc721TokenDeposits;
+    mapping(address => mapping(address => mapping(uint256 => bool))) public erc721TokenDeposits;
+
+    /**
+    @notice Function to change the ownership of the contract
+    Required that the caller is the owner of the contract
+    @param newOwner Address of the new owner
+    */
+    function changeOwnerShip(address newOwner) external {
+        if (msg.sender != owner) {
+            revert OnlyOwner(msg.sender, owner);
+        }
+        owner = newOwner;
+    }
+
 
     /**
     @notice Function to enable a token for withdrawal
@@ -84,6 +97,7 @@ contract MiniTreasury is ERC721TokenReceiver {
     /**
     @notice Function to deposit ERC20 tokens
     Required that the token is not the zero address
+    Required that the token is enabled for deposit
     Required that the user has approved the contract to spend the tokens
     @param token Address of the token to be deposited
     @param amount Amount of the token to be deposited
@@ -92,7 +106,11 @@ contract MiniTreasury is ERC721TokenReceiver {
         if (token == address(0)) {
             revert ZeroAddressNotAllowed();
         }
-        bool success = ERC20(token).transferFrom(
+        if (enabledTokens[token] == false) {
+            revert TokenNotEnabled(token);
+        }
+        erc20TokenBalances[msg.sender][token] += amount;
+        bool success = IERC20(token).transferFrom(
             msg.sender,
             address(this),
             amount
@@ -100,7 +118,6 @@ contract MiniTreasury is ERC721TokenReceiver {
         if (!success) {
             revert ERC20DepositFailed(token);
         }
-        erc20TokenBalances[msg.sender][token] += amount;
         emit ERC20TokenDeposited(msg.sender, token, amount);
     }
 
@@ -123,13 +140,14 @@ contract MiniTreasury is ERC721TokenReceiver {
             revert NotSufficientBalance(token, balance, amount);
         }
         erc20TokenBalances[msg.sender][token] = balance - amount;
-        ERC20(token).transfer(msg.sender, amount);
+        IERC20(token).transfer(msg.sender, amount);
         emit ERC20TokenWithdrawn(msg.sender, token, amount);
     }
 
     /**
     @notice Function to deposit ERC721 tokens
     Required that the token is not the zero address
+    Required that the token is enabled for deposit
     Required that the user has approved the contract to spend the tokens
     @param token Address of the token to be deposited
     @param tokenId Token ID of the token to be deposited
@@ -138,7 +156,10 @@ contract MiniTreasury is ERC721TokenReceiver {
         if (token == address(0)) {
             revert ZeroAddressNotAllowed();
         }
-        ERC721(token).safeTransferFrom(msg.sender, address(this), tokenId);
+        if (enabledTokens[token] == false) {
+            revert TokenNotEnabled(token);
+        }
+        IERC721(token).safeTransferFrom(msg.sender, address(this), tokenId);
         emit ERC721TokenDeposited(msg.sender, token, tokenId);
     }
 
@@ -156,26 +177,8 @@ contract MiniTreasury is ERC721TokenReceiver {
         if (!enabledTokens[token]) {
             revert TokenNotEnabled(token);
         }
-        uint256[] storage userTokenIds = erc721TokenDeposits[msg.sender][token];
-        bool tokenExists = false;
-        uint256 tokenIndex;
-
-        for (uint256 i = 0; i < userTokenIds.length; i++) {
-            if (userTokenIds[i] == tokenId) {
-                tokenExists = true;
-                tokenIndex = i;
-                break;
-            }
-        }
-
-        if (!tokenExists) {
-            revert TokenIdNotFound(token, tokenId);
-        }
-
-        userTokenIds[tokenIndex] = userTokenIds[userTokenIds.length - 1];
-        userTokenIds.pop();
-
-        ERC721(token).safeTransferFrom(address(this), msg.sender, tokenId);
+        erc721TokenDeposits[msg.sender][token][tokenId] = false;
+        IERC721(token).safeTransferFrom(address(this), msg.sender, tokenId);
         emit ERC721TokenWithdrawn(msg.sender, token, tokenId);
     }
 
@@ -185,7 +188,7 @@ contract MiniTreasury is ERC721TokenReceiver {
         uint256 tokenId,
         bytes calldata data
     ) external override returns (bytes4) {
-        erc721TokenDeposits[from][msg.sender].push(tokenId);
+        erc721TokenDeposits[from][msg.sender][tokenId] = true;
         return this.onERC721Received.selector;
     }
 }
