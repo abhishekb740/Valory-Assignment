@@ -13,6 +13,8 @@ Thus, this creates the possibility of locking tokens in a contract (simple examp
 In general, I do not expect all cases to be solved in this test task. <br>
 It is enough to add a check for a whitelisting on deposit(). <br>
 3. This is beyond the scope of the tasks, but it is necessary to add clarification that https://github.com/d-xo/weird-erc20 out of scope allowed ERC-20 implementation.
+4. Better ```erc20TokenBalances[msg.sender][token] += amount;``` mover before ERC20(token).transferFrom(). And so on. https://detectors.auditbase.com/checks-effects-interactions
+
 
 ## ERC721 logic (not KISS as possible)
 ```
