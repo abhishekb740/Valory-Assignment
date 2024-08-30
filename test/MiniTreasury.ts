@@ -67,6 +67,7 @@ describe("MiniTreasury", function () {
 
   describe("Deposit and Withdwaw ERC20 Tokens", async function () {
     it("should deposit ERC20 tokens", async function () {
+      await miniTreasury.connect(owner).enableAToken(erc20Mock.target);
       await erc20Mock.connect(addr1).mint(addr1.address, ethers.parseEther("100"));
       await erc20Mock.connect(addr1).approve(miniTreasury.target, ethers.parseEther("100"));
       await miniTreasury.connect(addr1).depositERC20(erc20Mock.target, ethers.parseEther("100"));
@@ -87,11 +88,12 @@ describe("MiniTreasury", function () {
 
   describe("Deposit and Withdwaw ERC721 Tokens", async function () {
     it("should deposit ERC721 tokens", async function () {
+      await miniTreasury.connect(owner).enableAToken(erc721Mock.target);
       await erc721Mock.connect(addr1).mint(addr1.address, 1);
       await erc721Mock.connect(addr1).approve(miniTreasury.target, 1);
       await miniTreasury.connect(addr1).depositERC721(erc721Mock.target, 1);
-      const balance = await miniTreasury.erc721TokenDeposits(addr1.address, erc721Mock.target, 0);
-      expect(balance).to.equal(1);
+      const status = await miniTreasury.erc721TokenDeposits(addr1.address, erc721Mock.target, 1);
+      expect(status).to.be.true;
     });
 
     it("should withdraw ERC721 tokens", async function () {

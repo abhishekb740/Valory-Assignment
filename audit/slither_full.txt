@@ -1,0 +1,90 @@
+'solc --version' running
+'solc ./MiniTreasury-flatten.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,/home/andrey/valory/Valory-Assignment/audit' running
+Compilation warnings/errors on ./MiniTreasury-flatten.sol:
+Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information.
+--> MiniTreasury-flatten.sol
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:616:9:
+    |
+616 |         address operator,
+    |         ^^^^^^^^^^^^^^^^
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:619:9:
+    |
+619 |         bytes calldata data
+    |         ^^^^^^^^^^^^^^^^^^^
+
+
+INFO:Detectors:
+MiniTreasury.withdrawERC20(address,uint256) (MiniTreasury-flatten.sol#547-561) ignores return value by ERC20(token).transfer(msg.sender,amount) (MiniTreasury-flatten.sol#559)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unchecked-transfer
+INFO:Detectors:
+MiniTreasury.withdrawERC721(address,uint256).tokenIndex (MiniTreasury-flatten.sol#594) is a local variable never initialized
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#uninitialized-local-variables
+INFO:Detectors:
+MiniTreasury withdrawERC721 parameter from is not related to msg.sender ERC721(token).safeTransferFrom(address(this),msg.sender,tokenId) (MiniTreasury-flatten.sol#611)
+Reference: https://ventral.digital/posts/2022/8/18/sznsdaos-bountyboard-unauthorized-transferfrom-vulnerability
+INFO:Detectors:
+Reentrancy in MiniTreasury.depositERC20(address,uint256) (MiniTreasury-flatten.sol#524-538):
+	External calls:
+	- success = ERC20(token).transferFrom(msg.sender,address(this),amount) (MiniTreasury-flatten.sol#528-532)
+	State variables written after the call(s):
+	- erc20TokenBalances[msg.sender][token] += amount (MiniTreasury-flatten.sol#536)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-2
+INFO:Detectors:
+Reentrancy in MiniTreasury.depositERC20(address,uint256) (MiniTreasury-flatten.sol#524-538):
+	External calls:
+	- success = ERC20(token).transferFrom(msg.sender,address(this),amount) (MiniTreasury-flatten.sol#528-532)
+	Event emitted after the call(s):
+	- ERC20TokenDeposited(msg.sender,token,amount) (MiniTreasury-flatten.sol#537)
+Reentrancy in MiniTreasury.depositERC721(address,uint256) (MiniTreasury-flatten.sol#570-576):
+	External calls:
+	- ERC721(token).safeTransferFrom(msg.sender,address(this),tokenId) (MiniTreasury-flatten.sol#574)
+	Event emitted after the call(s):
+	- ERC721TokenDeposited(msg.sender,token,tokenId) (MiniTreasury-flatten.sol#575)
+Reentrancy in MiniTreasury.withdrawERC20(address,uint256) (MiniTreasury-flatten.sol#547-561):
+	External calls:
+	- ERC20(token).transfer(msg.sender,amount) (MiniTreasury-flatten.sol#559)
+	Event emitted after the call(s):
+	- ERC20TokenWithdrawn(msg.sender,token,amount) (MiniTreasury-flatten.sol#560)
+Reentrancy in MiniTreasury.withdrawERC721(address,uint256) (MiniTreasury-flatten.sol#585-613):
+	External calls:
+	- ERC721(token).safeTransferFrom(address(this),msg.sender,tokenId) (MiniTreasury-flatten.sol#611)
+	Event emitted after the call(s):
+	- ERC721TokenWithdrawn(msg.sender,token,tokenId) (MiniTreasury-flatten.sol#612)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#reentrancy-vulnerabilities-3
+INFO:Detectors:
+ERC20.permit(address,address,uint256,uint256,uint8,bytes32,bytes32) (MiniTreasury-flatten.sol#113-157) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(deadline >= block.timestamp,PERMIT_DEADLINE_EXPIRED) (MiniTreasury-flatten.sol#122)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+MiniTreasury.withdrawERC20(address,uint256) (MiniTreasury-flatten.sol#547-561) compares to a boolean constant:
+	-enabledTokens[token] == false (MiniTreasury-flatten.sol#551)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#boolean-equality
+INFO:Detectors:
+ERC20._burn(address,uint256) (MiniTreasury-flatten.sol#192-202) is never used and should be removed
+ERC20._mint(address,uint256) (MiniTreasury-flatten.sol#180-190) is never used and should be removed
+ERC721._burn(uint256) (MiniTreasury-flatten.sol#375-390) is never used and should be removed
+ERC721._mint(address,uint256) (MiniTreasury-flatten.sol#360-373) is never used and should be removed
+ERC721._safeMint(address,uint256) (MiniTreasury-flatten.sol#396-405) is never used and should be removed
+ERC721._safeMint(address,uint256,bytes) (MiniTreasury-flatten.sol#407-420) is never used and should be removed
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#dead-code
+INFO:Detectors:
+Pragma version^0.8.24 (MiniTreasury-flatten.sol#3) necessitates a version too recent to be trusted. Consider deploying with 0.8.18.
+solc-0.8.25 is not recommended for deployment
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Function ERC20.DOMAIN_SEPARATOR() (MiniTreasury-flatten.sol#159-161) is not in mixedCase
+Variable ERC20.INITIAL_CHAIN_ID (MiniTreasury-flatten.sol#38) is not in mixedCase
+Variable ERC20.INITIAL_DOMAIN_SEPARATOR (MiniTreasury-flatten.sol#40) is not in mixedCase
+Variable ERC721._ownerOf (MiniTreasury-flatten.sol#234) is not in mixedCase
+Variable ERC721._balanceOf (MiniTreasury-flatten.sol#236) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Detectors:
+ERC721 (MiniTreasury-flatten.sol#209-421) does not implement functions:
+	- ERC721.tokenURI(uint256) (MiniTreasury-flatten.sol#228)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#unimplemented-functions
+INFO:Slither:. analyzed (4 contracts with 108 detectors), 24 result(s) found

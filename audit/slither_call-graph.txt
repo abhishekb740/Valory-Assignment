@@ -1,0 +1,25 @@
+'solc --version' running
+'solc ./MiniTreasury-flatten.sol --combined-json abi,ast,bin,bin-runtime,srcmap,srcmap-runtime,userdoc,devdoc,hashes --allow-paths .,/home/andrey/valory/Valory-Assignment/audit' running
+Compilation warnings/errors on ./MiniTreasury-flatten.sol:
+Warning: SPDX license identifier not provided in source file. Before publishing, consider adding a comment containing "SPDX-License-Identifier: <SPDX-License>" to each source file. Use "SPDX-License-Identifier: UNLICENSED" for non-open-source code. Please see https://spdx.org for more information.
+--> MiniTreasury-flatten.sol
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:616:9:
+    |
+616 |         address operator,
+    |         ^^^^^^^^^^^^^^^^
+
+Warning: Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> MiniTreasury-flatten.sol:619:9:
+    |
+619 |         bytes calldata data
+    |         ^^^^^^^^^^^^^^^^^^^
+
+
+INFO:Printers:Call Graph: ./MiniTreasury-flatten.sol.all_contracts.call-graph.dot
+Call Graph: ./MiniTreasury-flatten.sol.ERC20.call-graph.dot
+Call Graph: ./MiniTreasury-flatten.sol.ERC721.call-graph.dot
+Call Graph: ./MiniTreasury-flatten.sol.MiniTreasury.call-graph.dot
+
+INFO:Slither:. analyzed (4 contracts)
