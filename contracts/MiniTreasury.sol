@@ -35,6 +35,7 @@ contract MiniTreasury is ERC721TokenReceiver {
     error TransferFailed(address token, address recipient, uint256 tokenId);
     error ERC20DepositFailed(address token);
     error ZeroAddressNotAllowed();
+    error NoERC721TokenDeposited(address token, uint256 tokenId);
 
     constructor() {
         owner = msg.sender;
@@ -176,6 +177,9 @@ contract MiniTreasury is ERC721TokenReceiver {
         }
         if (!enabledTokens[token]) {
             revert TokenNotEnabled(token);
+        }
+        if(erc721TokenDeposits[msg.sender][token][tokenId]==false){
+            revert NoERC721TokenDeposited(token, tokenId);
         }
         erc721TokenDeposits[msg.sender][token][tokenId] = false;
         IERC721(token).safeTransferFrom(address(this), msg.sender, tokenId);
