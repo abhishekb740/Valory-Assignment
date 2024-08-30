@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "./IERC20.sol";
 import "./IERC721.sol";
-import "./ERC721TokenReceiver.sol";
+import "@rari-capital/solmate/src/tokens/ERC721.sol";
 
 contract MiniTreasury is ERC721TokenReceiver {
     /**
@@ -160,6 +160,7 @@ contract MiniTreasury is ERC721TokenReceiver {
         if (enabledTokens[token] == false) {
             revert TokenNotEnabled(token);
         }
+        erc721TokenDeposits[msg.sender][token][tokenId] = true;
         IERC721(token).safeTransferFrom(msg.sender, address(this), tokenId);
         emit ERC721TokenDeposited(msg.sender, token, tokenId);
     }
@@ -192,7 +193,6 @@ contract MiniTreasury is ERC721TokenReceiver {
         uint256 tokenId,
         bytes calldata data
     ) external override returns (bytes4) {
-        erc721TokenDeposits[from][msg.sender][tokenId] = true;
         return this.onERC721Received.selector;
     }
 }
