@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "./IERC20.sol";
 import "./IERC721.sol";
-import "@rari-capital/solmate/src/tokens/ERC721.sol";
+import {ERC721TokenReceiver} from "@rari-capital/solmate/src/tokens/ERC721.sol";
 
 contract MiniTreasury is ERC721TokenReceiver {
     /**
